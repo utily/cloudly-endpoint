@@ -20,6 +20,11 @@ export class Context {
 		}
 		return http.Response.to(result)
 	}
+	static authenticate(
+		scope: "admin" | "private"
+	): (request: http.Request, context: Context) => Promise<"admin" | undefined> {
+		return async (request, context) => context.authenticate(request)
+	}
 }
 
 export namespace Context {
