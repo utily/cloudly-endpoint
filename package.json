@@ -1,6 +1,6 @@
 {
 	"name": "cloudly-endpoint",
-	"version": "0.0.3",
+	"version": "0.0.4",
 	"description": "Library for creating Cloudflare Workers using a declarative syntax.",
 	"author": "Utily Contributors",
 	"license": "MIT",
