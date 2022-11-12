@@ -5,15 +5,21 @@ import * as cloudlyRouter from "cloudly-router"
 
 export interface Endpoint<E extends Endpoint.Type> {
 	listen: { pattern: string | URLPattern; methods: http.Method | http.Method[] }
-	authenticate?: (request: http.Request) => Promise<E["authentication"] | undefined>
+	authenticate?: (request: http.Request, context: E["context"]) => Promise<E["authentication"] | undefined>
 	body?: (body: any) => boolean
-	result: (request: { authentication: E["authentication"]; body: E["body"] }) => http.Response.Like | any
+	context?: (keyof E["context"])[]
+	result: (request: {
+		authentication: E["authentication"]
+		body: E["body"]
+		context?: E["context"] // TODO: remove gracely errors
+	}) => http.Response.Like | any
 }
 
 export namespace Endpoint {
 	export type Type = {
 		authentication: string | boolean | Record<string, any> | undefined
 		body?: any | undefined
+		context: any | undefined
 	}
 	export function toHandler<E extends Endpoint.Type, C>(
 		endpoint: Endpoint<E>
@@ -24,7 +30,7 @@ export namespace Endpoint {
 			async (request, context) => {
 				const body = endpoint.body && (await request.body)
 				let result: any | gracely.Result
-				const authentication = endpoint.authenticate && (await endpoint.authenticate(request))
+				const authentication = endpoint.authenticate && (await endpoint.authenticate(request, context))
 				if (!authentication && endpoint.authenticate)
 					result = gracely.client.unauthorized()
 				else if (endpoint.body != undefined && !endpoint.body(body))

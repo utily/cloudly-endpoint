@@ -19,7 +19,7 @@ main = "./_worker.mjs"
 [env.wrangler]
 workers_dev = true
 account_id = "abcdefg01234567890"
-vars = {  }
+vars = { }
 
 [env.miniflare]
 vars = { }

@@ -58,7 +58,8 @@
 		"login": "wrangler login",
 		"start": "(rollup --config rollup.dev.config.js --watch) & (node --experimental-vm-modules --inspect ./node_modules/miniflare/dist/src/cli.js dist/_worker.mjs --wrangler-env miniflare --watch --live-reload -B 'while [ ! -f dist/_worker.mjs ]; do sleep 0.1; done' && kill $!)",
 		"start:wrangler": "wrangler dev --env wrangler",
-		"clean": "rimraf dist node_modules coverage"
+		"clean": "rimraf dist node_modules coverage",
+		"forge": "cd .. && npm run build && cd ./test-worker && npm run build"
 	},
 	"devDependencies": {
 		"wrangler": "^2.0.7",
