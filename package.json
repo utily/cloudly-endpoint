@@ -29,13 +29,14 @@
 			"^.+\\.(j|t)sx?$": "ts-jest"
 		},
 		"transformIgnorePatterns": [
-			"<rootDir>/node_modules/(?!(cryptly|authly|isoly|gracely|cloudly-http|cloudly-router|cloudly-formdata)/.*)"
+			"<rootDir>/node_modules/(?!(cryptly|authly|isoly|gracely|cloudly-http|cloudly-router|cloudly-endpoint)/.*)"
 		],
 		"testEnvironment": "node",
 		"testRegex": "((\\.|/)(test|spec))(\\.|\\/.+)(jsx?|tsx?)$",
 		"testPathIgnorePatterns": [
 			"node_modules/",
-			"dist/"
+			"dist/",
+			"test-worker/"
 		],
 		"collectCoverageFrom": [
 			"**/*.{ts,tsx,js,jsx}",
@@ -49,9 +50,12 @@
 		"lint": "eslint --max-warnings=0 '**/*.{ts,tsx}'",
 		"fix": "eslint '**/*.{ts,tsx}' --fix",
 		"build": "tsc -p .",
-		"test": "jest",
+		"jest": "jest",
+		"test": "cd test-worker/ && npm run test && cd .. && jest",
 		"prepare": "npm run build",
-		"clean": "rimraf dist node_modules coverage"
+		"clean": "rimraf dist node_modules coverage",
+		"start": "npm --prefix test-worker run start",
+		"uninstall": "rm -rf dist && rm -rf test-worker/dist"
 	},
 	"devDependencies": {
 		"@types/jest": "^29.2.2",
@@ -68,6 +72,7 @@
 	},
 	"dependencies": {
 		"cloudly-http": "^0.0.53",
-		"cloudly-router": "^0.0.26"
+		"cloudly-router": "^0.0.26",
+		"gracely": "^2.0.3"
 	}
 }
