@@ -2,6 +2,7 @@ import * as gracely from "gracely"
 import "urlpattern-polyfill"
 import * as http from "cloudly-http"
 import * as cloudlyRouter from "cloudly-router"
+import * as isly from "isly"
 
 export interface Endpoint<E extends Endpoint.Type> {
 	listen: { pattern: string | URLPattern; methods: http.Method | http.Method[] }
@@ -33,8 +34,8 @@ export namespace Endpoint {
 				const authentication = endpoint.authenticate && (await endpoint.authenticate(request, context))
 				if (!authentication && endpoint.authenticate)
 					result = gracely.client.unauthorized()
-				else if (endpoint.body != undefined && !endpoint.body(body))
-					result = gracely.client.invalidContent("any", "Not specified")
+				else if (endpoint.body != undefined && !endpoint.body.is(body))
+					result = gracely.client.flawedContent(endpoint.body.flaw(body) as isly.Flaw)
 				else
 					result = endpoint.result({ authentication, body })
 				return result

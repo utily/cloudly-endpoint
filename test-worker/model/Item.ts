@@ -1,10 +1,18 @@
+import * as isly from "isly"
+
 export interface Item {
 	id: string
 	number: number
 }
 
 export namespace Item {
-	export function is(value: any | Item): value is Item {
-		return typeof value == "object" && typeof value.id == "string" && typeof value.number == "number"
-	}
+	export const type = isly.object(
+		{
+			id: isly.string,
+			number: isly.number,
+		},
+		"Item"
+	)
+	export const is = type.is
+	export const flaw = type.flaw
 }
